@@ -1,0 +1,34 @@
+# Editor, IDE
+.vscode/
+.idea
+
+# macOS
+.DS_Store
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Files of experiment
+/plaintext_experiment/notebooks/
+/plaintext_experiment/*/epoch_logs/
+/plaintext_experiment/*/graphs/
+/plaintext_experiment/*/histories/
+
+# Generated files
+build/
+bin/
+secrets/
+logs/

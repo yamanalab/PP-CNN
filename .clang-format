@@ -1,0 +1,10 @@
+BasedOnStyle: 'Google'
+BreakBeforeBraces: 'Attach'
+ColumnLimit: 0
+Cpp11BracedListStyle: false
+AccessModifierOffset: -2
+AlignConsecutiveAssignments: true
+AlignEscapedNewlinesLeft: true
+AlignTrailingComments: true
+AlwaysBreakTemplateDeclarations: true
+NamespaceIndentation: 'Inner'
