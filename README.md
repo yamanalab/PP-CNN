@@ -1,5 +1,5 @@
 # PP-CNN
-Privacy preserving CNN inference on homomorphic encryption
+Privacy Preserving CNN Inference over Homomorphic Encryption
 
 ## Directory structure
 ```
