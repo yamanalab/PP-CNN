@@ -27,105 +27,37 @@ pp-cnn
 ```
 
 ## Requirement
-- CMake(>=3.15)
-- [SEAL(3.4.4)](https://github.com/microsoft/SEAL/tree/3.4.4)
-- Boost
-  - boost::multi_array
-  - boost::program_options
+- GCC (7.4.0)
+- CMake (>=3.15)
+- [SEAL (3.4.4)](https://github.com/microsoft/SEAL/tree/3.4.4)
+- Boost (Use `boost::multi_array` & `boost::program_options`)
 - HDF5
-  - require zlib & szip
+  - Require zlib & szip
 
 [Model training] (Python)
 - Keras(2.0.8)
-- tensorflow(1.14.0)
 - tensorflow-gpu(1.4.0)
 
-## Install required libraries
-Example
+## Dataset
+- MNIST (http://yann.lecun.com/exdb/mnist/)
+- CIFAR-10 (https://www.cs.toronto.edu/~kriz/cifar.html)
+
+### Download MNIST dataset in `pp_cnn/datasets/mnist/`
 ```
-#/usr/bin/env bash
-set -eu
+$ mkdir -p pp_cnn/datasets/mnist && cd pp_cnn/datasets/mnist
+$ wget http://yann.lecun.com/exdb/mnist/train-images-idx3-ubyte.gz
+$ wget http://yann.lecun.com/exdb/mnist/train-labels-idx1-ubyte.gz
+$ wget http://yann.lecun.com/exdb/mnist/t10k-images-idx3-ubyte.gz
+$ wget http://yann.lecun.com/exdb/mnist/t10k-labels-idx1-ubyte.gz
+$ gunzip *.gz
+```
 
-# NOTE: Add following code in .bashrc or .zshrc
-# export LD_LIBRARY_PATH="$HOME/.local/lib:$LD_LIBRARY_PATH"
-
-install_cmake () {
-  cd ~/downloads && \
-  wget https://github.com/Kitware/CMake/releases/download/v3.16.0/cmake-3.16.0.tar.gz && \
-  tar xvzf cmake-3.16.0.tar.gz && \
-  cd cmake-3.16.0 && \
-  mkdir build && \
-  cd build && \
-  ../bootstrap --prefix="${HOME}/.local" && \
-  make && \
-  make install
-}
-
-install_seal () {
-  cd ~/github && \
-  git clone git@github.com:microsoft/SEAL.git && \
-  cd SEAL && \
-  git checkout 3.4.4 && \
-  cd native/src && \
-  mkdir build && \
-  cd build && \
-  cmake .. -DCMAKE_INSTALL_PREFIX=~/mylibs && \
-  make && \
-  make install
-}
-
-install_boost () {
-  cd ~/downloads && \
-  wget https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz && \
-  tar xvzf boost_1_65_1.tar.gz && \
-  cd boost_1_65_1 && \
-  ./bootstrap.sh --prefix="${HOME}/.local" && \
-  ./b2 install -j2 --prefix="${HOME}/.local"
-}
-
-install_zlib () {
-  cd ~/downloads && \
-  wget http://www.zlib.net/zlib-1.2.11.tar.gz && \
-  tar xvzf zlib-1.2.11.tar.gz && \
-  cd zlib-1.2.11 && \
-  ./configure --prefix="${HOME}/.local" && \
-  make && \
-  make install
-}
-
-install_szip () {
-  cd ~/downloads && \
-  wget https://support.hdfgroup.org/ftp/lib-external/szip/2.1.1/src/szip-2.1.1.tar.gz && \
-  tar xvzf szip-2.1.1.tar.gz && \
-  cd szip-2.1.1 && \
-  ./configure --prefix="${HOME}/.local" && \
-  make && \
-  make install
-}
-
-install_hdf5 () {
-  install_zlib
-  install_szip
-  cd ~/downloads && \
-  wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.0-patch1/bin/linux-centos7-x86_64-gcc485/hdf5-1.10.0-patch1-linux-centos7-x86_64-gcc485-shared.tar.gz && \
-  tar xvzf hdf5-1.10.0-patch1-linux-centos7-x86_64-gcc485-shared.tar.gz && \
-  cd hdf5-1.10.0-patch1-linux-centos7-x86_64-gcc485-shared && \
-  cp include/* ~/.local/include/ && \
-  cp lib/* ~/.local/lib/
-}
-
-run () {
-  [[ -d ~/downloads ]] || mkdir ~/downloads
-  [[ -d ~/mylibs ]] || mkdir ~/mylibs
-  [[ -d ~/github ]] || mkdir ~/github
-
-  install_cmake
-  install_seal
-  install_boost
-  install_hdf5
-}
-
-run
+### Download CIFAR-10 dataset in `pp_cnn/datasets/cifar-10/`
+```
+$ mkdir -p pp_cnn/datasets/cifar-10 && cd pp_cnn/datasets/cifar-10
+$ wget https://www.cs.toronto.edu/~kriz/cifar-10-binary.tar.gz
+$ tar zxvf cifar-10-binary.tar.gz
+$ mv cifar-10-batches-bin/* ./ && rmdir cifar-10-batches-bin/
 ```
 
 ## Train model
@@ -133,34 +65,33 @@ Model training code (Python) is in `plaintext_experiment/`
 
 ex) MNIST dataset
 ```
-cd plaintext_experiment/mnist
-python HCNN.py --da
+$ cd plaintext_experiment/mnist
+$ python HCNN.py --da
 ```
 
 ## Build pp_cnn
 You can build by executing the following commands:
 ```
-cd pp_cnn/src
-mkdir build
-cd build
-cmake ..
-make
+$ cd pp_cnn/src
+$ mkdir build && cd build
+$ cmake ..
+$ make
 ```
 
 ## Run
 1. Setup SEAL setting (setup.cpp)
 ```
-cd pp_cnn/bin
-./setup -P 15 -L 5
+$ cd pp_cnn/bin
+$ ./setup -P 15 -L 5
 ```
 2. Secure inference of test data (main.cpp)
 ```
-cd pp_cnn/bin
-OMP_NUM_THREADS=xx ./main -D mnist -M HCNN-DA
+$ cd pp_cnn/bin
+$ OMP_NUM_THREADS=xx ./main -D mnist -M HCNN-DA
 ```
 
 ## License
-Copyright 2018 Yamana Laboratory, Waseda University Supported by JST CREST Grant Number JPMJCR1503, Japan.
+Copyright 2020 Yamana Laboratory, Waseda University Supported by JST CREST Grant Number JPMJCR1503, Japan.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 

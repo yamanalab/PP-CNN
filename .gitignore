@@ -27,6 +27,9 @@ venv.bak/
 /plaintext_experiment/*/graphs/
 /plaintext_experiment/*/histories/
 
+# Dataset binary files
+/pp_cnn/datasets/
+
 # Generated files
 build/
 bin/
