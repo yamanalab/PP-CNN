@@ -1,0 +1,3 @@
+add_subdirectory(ppcnn_client)
+add_subdirectory(ppcnn_server)
+add_subdirectory(ppcnn_share)

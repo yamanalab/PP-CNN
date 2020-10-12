@@ -1,0 +1,3 @@
+[submodule "stdsc"]
+	path = stdsc
+	url = https://github.com/yamanalab/stdsc.git
